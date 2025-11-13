@@ -6,7 +6,9 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
-  const token = req.cookies?.auth_token;
+  const token = req.cookies?.token;
+  console.log('Auth middleware - cookies:', req.cookies);
+  console.log('Auth middleware - token found:', !!token);
   if (!token) return res.status(401).json({ message: 'Not authenticated' });
 
   try {

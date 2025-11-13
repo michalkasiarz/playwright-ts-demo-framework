@@ -57,7 +57,8 @@ router.get('/oauth/google', (req, res) => {
   }
   
   passport.authenticate('google', { 
-    scope: ['profile', 'email'] 
+    scope: ['profile', 'email'],
+    prompt: 'consent'
   })(req, res);
 });
 
@@ -69,6 +70,9 @@ router.get('/oauth/google/callback', (req, res, next) => {
   passport.authenticate('google', { failureRedirect: '/login-failed' })(req, res, async () => {
     try {
       const user = req.user as any;
+      console.log('OAuth success - Full User object:', user);
+      console.log('OAuth success - User email from DB:', user.email);
+      console.log('OAuth success - User username:', user.username);
       
       // Generate JWT for OAuth user (optional - can use session instead)
       const token = signToken({
@@ -84,11 +88,12 @@ router.get('/oauth/google/callback', (req, res, next) => {
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
       });
 
-      // Redirect to success page or app
-      res.redirect('http://localhost:3000/login-success');
+      // Redirect to success page with Google email parameter
+      const googleEmail = user.email || user.username;
+      res.redirect(`/login-success.html?email=${encodeURIComponent(googleEmail)}`);
     } catch (error) {
       console.error('OAuth callback error:', error);
-      res.redirect('/login-failed');
+      res.redirect('/login-failed.html');
     }
   });
 });
@@ -97,6 +102,47 @@ router.get('/oauth/google/callback', (req, res, next) => {
 router.get('/me', requireAuth, (req, res) => {
   const user = (req as AuthenticatedRequest).user!;
   res.json({ username: user.username, role: user.role });
+});
+
+// Get detailed user info including OAuth data
+router.get('/user-info', requireAuth, async (req, res) => {
+  try {
+    console.log('User-info request - JWT payload:', (req as AuthenticatedRequest).user);
+    const userId = (req as AuthenticatedRequest).user!.sub;
+    console.log('Looking for user with ID:', userId);
+    const user = await User.findById(userId).select('-passwordHash');
+    console.log('Found user:', user);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userInfo = {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      authMethod: user.googleId ? 'google-oauth' : 'password',
+      
+      // OAuth data
+      googleId: user.googleId || null,
+      displayName: user.displayName || null,
+      firstName: user.firstName || null,
+      lastName: user.lastName || null,
+      profilePicture: user.profilePicture || null,
+      email: user.email || null,
+      emailVerified: user.emailVerified || false,
+      
+      // TOTP
+      totpEnabled: user.totpEnabled || false
+    };
+
+    res.json(userInfo);
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 export default router;

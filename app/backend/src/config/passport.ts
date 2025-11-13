@@ -15,6 +15,17 @@ if (!clientID || !clientSecret) {
     callbackURL: '/api/auth/oauth/google/callback'
   }, async (accessToken, refreshToken, profile, done) => {
   try {
+    console.log('Google Profile Data:', {
+      id: profile.id,
+      displayName: profile.displayName,
+      name: profile.name,
+      emails: profile.emails,
+      photos: profile.photos,
+      provider: profile.provider,
+      raw: profile._raw,
+      json: profile._json
+    });
+    
     // Check if user already exists with this Google ID
     let user = await User.findOne({ googleId: profile.id });
     
@@ -29,6 +40,11 @@ if (!clientID || !clientSecret) {
       if (user) {
         // Link Google account to existing user
         user.googleId = profile.id;
+        user.displayName = profile.displayName;
+        user.firstName = profile.name?.givenName;
+        user.lastName = profile.name?.familyName;
+        user.profilePicture = profile.photos?.[0]?.value;
+        user.emailVerified = profile.emails?.[0]?.verified || false;
         await user.save();
         return done(null, user);
       }
@@ -38,7 +54,13 @@ if (!clientID || !clientSecret) {
     user = new User({
       username: email || `google_${profile.id}`,
       googleId: profile.id,
-      role: 'customer'
+      role: 'customer',
+      displayName: profile.displayName,
+      firstName: profile.name?.givenName,
+      lastName: profile.name?.familyName,
+      profilePicture: profile.photos?.[0]?.value,
+      email: email,
+      emailVerified: profile.emails?.[0]?.verified || false
     });
     
     await user.save();

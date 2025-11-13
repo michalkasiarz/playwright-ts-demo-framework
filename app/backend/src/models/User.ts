@@ -9,6 +9,14 @@ const userSchema = new Schema({
   googleId: { type: String },
   githubId: { type: String },
   
+  // Google profile data
+  displayName: { type: String },
+  firstName: { type: String },
+  lastName: { type: String },
+  profilePicture: { type: String },
+  email: { type: String },
+  emailVerified: { type: Boolean },
+  
   // TOTP fields
   totpSecret: { type: String },
   totpEnabled: { type: Boolean, default: false },
