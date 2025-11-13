@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "Backend API for E2E testing demo shop",
   "main": "dist/server.js",
-"scripts": {
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-  "seed": "ts-node src/seed.ts"
-},
-  "keywords": ["typescript", "express", "mongodb", "jwt", "e2e-testing"],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "seed": "ts-node src/seed.ts"
+  },
+  "keywords": [
+    "typescript",
+    "express",
+    "mongodb",
+    "jwt",
+    "e2e-testing"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "type": "commonjs",
@@ -19,7 +25,11 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.3"
+    "mongoose": "^8.19.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
@@ -27,6 +37,9 @@
     "@types/express": "^5.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/qrcode": "^1.5.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }
