@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 export type JwtPayload = {
-  sub: string;       // userId
+  sub: string;
   username: string;
   role: 'customer' | 'admin';
 };

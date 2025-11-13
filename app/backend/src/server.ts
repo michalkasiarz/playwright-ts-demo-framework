@@ -22,6 +22,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Static files for testing
+app.use(express.static('.'));
+
 // Routes
 app.get('/', (req, res) => {
   res.json({ message: 'Backend API is running!' });
