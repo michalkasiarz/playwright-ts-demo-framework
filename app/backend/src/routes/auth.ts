@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
   const user = await User.findOne({ username });
 
   // Simple password check for demo purposes
-  if (!user || user.passwordHash !== password) {
+  if (!user || !user.passwordHash || user.passwordHash !== password) {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
 
@@ -33,8 +33,8 @@ router.post('/login', async (req, res) => {
   res.json({ username: user.username, role: user.role });
 });
 
-router.get('/me', requireAuth, (req: AuthenticatedRequest, res) => {
-  const user = req.user!;
+router.get('/me', requireAuth, (req, res) => {
+  const user = (req as AuthenticatedRequest).user!;
   res.json({ username: user.username, role: user.role });
 });
 

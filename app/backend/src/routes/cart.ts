@@ -6,14 +6,14 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.get('/', async (req: AuthenticatedRequest, res) => {
-  const userId = req.user!.sub;
+router.get('/', async (req, res) => {
+  const userId = (req as AuthenticatedRequest).user!.sub;
   const items = await CartItem.find({ userId }).lean();
   res.json(items);
 });
 
-router.post('/', async (req: AuthenticatedRequest, res) => {
-  const userId = req.user!.sub;
+router.post('/', async (req, res) => {
+  const userId = (req as AuthenticatedRequest).user!.sub;
   const { productId, quantity } = req.body ?? {};
 
   if (!productId || !quantity) {
