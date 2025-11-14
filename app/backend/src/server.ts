@@ -5,6 +5,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import passport from './config/passport';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import cartRoutes from './routes/cart';
@@ -21,6 +23,24 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Session configuration for OAuth
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Static files for testing
+app.use(express.static('.'));
 
 // Routes
 app.get('/', (req, res) => {

@@ -10,7 +10,7 @@ async function seed() {
   await mongoose.connect(MONGODB_URI);
   console.log('Connected to MongoDB for seeding');
 
-  // 1) User
+  // 1) Users
   const existingUser = await User.findOne({ username: 'standard' });
   if (!existingUser) {
     await User.create({
@@ -21,6 +21,18 @@ async function seed() {
     console.log('Created user: standard / secret');
   } else {
     console.log('User "standard" already exists');
+  }
+
+  const existingUser1 = await User.findOne({ username: 'user1' });
+  if (!existingUser1) {
+    await User.create({
+      username: 'user1',
+      passwordHash: 'pass123',
+      role: 'customer',
+    });
+    console.log('Created user: user1 / pass123');
+  } else {
+    console.log('User "user1" already exists');
   }
 
   // 2) Products
