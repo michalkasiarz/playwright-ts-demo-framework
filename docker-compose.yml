@@ -21,6 +21,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
+
   worker-order-created:
     build: ./app/backend
     container_name: demo_worker_order_created
@@ -44,7 +45,7 @@ services:
         RABBITMQ_URL: amqp://user:password@rabbitmq:5672
         GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
         GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      command: npx ts-node src/app/server.ts
+      command: npx ts-node src/server.ts
       depends_on:
         - mongo
         - rabbitmq
