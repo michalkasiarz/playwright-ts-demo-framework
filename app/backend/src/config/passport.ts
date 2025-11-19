@@ -12,7 +12,7 @@ if (!clientID || !clientSecret) {
   passport.use('google', new GoogleStrategy({
     clientID,
     clientSecret,
-    callbackURL: '/api/auth/oauth/google/callback'
+    callbackURL: 'http://localhost:3000/api/auth/oauth/google/callback'  // Full URL for Google
   }, async (accessToken, refreshToken, profile, done) => {
   try {
     console.log('Google Profile Data:', {

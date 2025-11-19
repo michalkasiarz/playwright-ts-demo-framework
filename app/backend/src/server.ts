@@ -10,6 +10,7 @@ import passport from './config/passport';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import cartRoutes from './routes/cart';
+import { setupSwagger } from './swagger';
 
 const app = express();
 
@@ -18,7 +19,7 @@ const PORT = Number(process.env.PORT) || 3000;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: true, // Allow all origins for development
   credentials: true
 }));
 app.use(express.json());
@@ -30,8 +31,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    secure: false, // Allow non-HTTPS for localhost
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'lax' // Allow cross-site requests for OAuth
   }
 }));
 
@@ -50,6 +53,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+setupSwagger(app);
 
 async function start() {
   await mongoose.connect(MONGODB_URI);
