@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import mongoose from 'mongoose';
-import { User } from './models/User';
-import { Product } from './models/Product';
+import { User } from '../models/User';
+import { Product } from '../models/Product';
 
 async function seed() {
   const MONGODB_URI = process.env.MONGODB_URI!;
