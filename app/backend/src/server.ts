@@ -10,7 +10,8 @@ import passport from './config/passport';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import cartRoutes from './routes/cart';
-import { setupSwagger } from './swagger';
+import orderRoutes from './routes/order';
+import { setupSwagger } from './config/swagger';
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 setupSwagger(app);
 
 async function start() {

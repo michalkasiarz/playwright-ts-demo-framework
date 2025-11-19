@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import mongoose from 'mongoose';
-import { User } from './models/User';
+import { User } from '../models/User';
 
 async function clearUsers() {
   const MONGODB_URI = process.env.MONGODB_URI!;

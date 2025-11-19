@@ -11,20 +11,44 @@ services:
     volumes:
       - mongo_data:/data/db
 
-  backend:
-    build: ./app/backend
-    container_name: demo_backend
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: demo_rabbitmq
     restart: always
     ports:
-      - "3000:3000"
+      - "5672:5672"   # port for application
+      - "15672:15672" # port for management panel
     environment:
-      MONGODB_URI: mongodb://mongo:27017/demo_shop
-      JWT_SECRET: secretkey123
-      PORT: 3000
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  worker-order-created:
+    build: ./app/backend
+    container_name: demo_worker_order_created
+    restart: always
+    environment:
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+    command: npx ts-node src/rabbitmq/worker-order-created.ts
     depends_on:
-      - mongo
+      - rabbitmq
+
+  backend:
+      build: ./app/backend
+      container_name: demo_backend
+      restart: always
+      ports:
+        - "3000:3000"
+      environment:
+        MONGODB_URI: mongodb://mongo:27017/demo_shop
+        JWT_SECRET: secretkey123
+        PORT: 3000
+        RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      command: npx ts-node src/server.ts
+      depends_on:
+        - mongo
+        - rabbitmq
 
   frontend:
     build: ./app/frontend
