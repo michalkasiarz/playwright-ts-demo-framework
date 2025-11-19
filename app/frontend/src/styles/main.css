@@ -1,0 +1,31 @@
+/* Import the main CSS file */
+@import url('../../public/styles.css');
+
+/* OAuth mock styles */
+.mock-user-option.selected {
+    border-color: #4285f4 !important;
+    background-color: #e3f2fd !important;
+}
+
+.mock-user-option:hover {
+    border-color: #4285f4;
+    background-color: #f8f9ff;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid #007bff;
+}
+
+.notice {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 25px;
+    color: #856404;
+    font-size: 13px;
+}

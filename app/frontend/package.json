@@ -1,0 +1,31 @@
+{
+  "name": "playwright-demo-frontend",
+  "version": "1.0.0",
+  "description": "Vanilla TypeScript frontend for Playwright E2E testing demo",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development",
+    "start": "npm run dev",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "frontend",
+    "auth",
+    "demo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^6.11.0",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.4.0",
+    "typescript": "^5.0.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "webpack-dev-server": "^4.15.0"
+  }
+}
