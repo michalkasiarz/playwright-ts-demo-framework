@@ -2,9 +2,17 @@ export class ApiService {
     private baseUrl: string;
 
     constructor(baseUrl: string = '') {
-        // In development, webpack proxy will handle API calls
-        // In production, you might need to set the actual API URL
-        this.baseUrl = baseUrl;
+        // Use environment variable if available, otherwise default to backend service name in Docker
+        // In Docker, frontend should call backend using service name, not localhost
+        if (typeof window !== 'undefined' && (window as any).API_BASE_URL) {
+            this.baseUrl = (window as any).API_BASE_URL;
+        } else if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            // If running in Docker, use backend service name
+            this.baseUrl = 'http://backend:3001';
+        } else {
+            // Local dev: use relative URL, webpack proxy will handle
+            this.baseUrl = baseUrl;
+        }
     }
 
     /**

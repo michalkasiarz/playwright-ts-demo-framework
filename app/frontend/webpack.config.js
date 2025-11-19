@@ -43,7 +43,7 @@ module.exports = {
       ],
     },
     proxy: {
-      "/api": "http://localhost:3000", // Proxy API calls to backend
+      "/api": "http://backend:3000", // Proxy API calls to backend container in Docker
     },
   },
 };
