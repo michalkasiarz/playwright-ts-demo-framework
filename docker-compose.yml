@@ -1,5 +1,44 @@
 version: '3.8'
 services:
+  worker-order-paid:
+    build: ./app/backend
+    container_name: demo_worker_order_paid
+    restart: always
+    environment:
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+    command: npx ts-node src/rabbitmq/worker-order-paid.ts
+    depends_on:
+      - rabbitmq
+
+  worker-order-shipped:
+    build: ./app/backend
+    container_name: demo_worker_order_shipped
+    restart: always
+    environment:
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+    command: npx ts-node src/rabbitmq/worker-order-shipped.ts
+    depends_on:
+      - rabbitmq
+
+  worker-user-registered:
+    build: ./app/backend
+    container_name: demo_worker_user_registered
+    restart: always
+    environment:
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+    command: npx ts-node src/rabbitmq/worker-user-registered.ts
+    depends_on:
+      - rabbitmq
+
+  worker-product-added:
+    build: ./app/backend
+    container_name: demo_worker_product_added
+    restart: always
+    environment:
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+    command: npx ts-node src/rabbitmq/worker-product-added.ts
+    depends_on:
+      - rabbitmq
   mongo:
     image: mongo:6
     container_name: demo_mongo
