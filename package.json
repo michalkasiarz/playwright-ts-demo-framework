@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@types/nodemailer": "^7.0.4",
     "amqplib": "^0.10.9",
+    "nodemailer": "^7.0.10",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

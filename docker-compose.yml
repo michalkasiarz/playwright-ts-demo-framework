@@ -66,10 +66,14 @@ services:
     container_name: demo_worker_order_created
     restart: always
     environment:
+      MONGODB_URI: mongodb://mongo:27017/demo_shop
       RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+      MAILTRAP_USER: ${MAILTRAP_USER}
+      MAILTRAP_PASS: ${MAILTRAP_PASS}
     command: npx ts-node src/rabbitmq/worker-order-created.ts
     depends_on:
       - rabbitmq
+      - mongo
 
   backend:
       build: ./app/backend
